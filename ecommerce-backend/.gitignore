@@ -1,0 +1,35 @@
+# Compilados de Java
+target/
+build/
+
+# Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/nb-gradle/
+
+# VS Code
+.vscode/
+
+# Archivos temporales y logs
+*.log
+*.tmp
+.DS_Store
