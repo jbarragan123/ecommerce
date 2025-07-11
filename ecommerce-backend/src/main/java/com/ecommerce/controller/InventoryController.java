@@ -20,37 +20,37 @@ public class InventoryController {
     }
 
     @GetMapping
-    public List<Inventory> getAllInventories(@RequestHeader("X-User-Id") Long userId) {
+    public List<Inventory> getAllInventories() {
         List<Inventory> inventories = inventoryRepository.findAll();
-        auditService.logAction("User " + userId + " listed all inventories", "Inventory", null);
+        auditService.logAction("listed all inventories", "Inventory", null);
         return inventories;
     }
 
     @PostMapping
-    public Inventory createInventory(@RequestBody Inventory inventory, @RequestHeader("X-User-Id") Long userId) {
+    public Inventory createInventory(@RequestBody Inventory inventory) {
         Inventory saved = inventoryRepository.save(inventory);
-        auditService.logAction("User " + userId + " created inventory", "Inventory", saved.getId());
+        auditService.logAction("created inventory", "Inventory", saved.getId());
         return saved;
     }
 
     @GetMapping("/{id}")
-    public Inventory getInventory(@PathVariable Long id, @RequestHeader("X-User-Id") Long userId) {
+    public Inventory getInventory(@PathVariable Long id) {
         Inventory inventory = inventoryRepository.findById(id).orElse(null);
-        auditService.logAction("User " + userId + " viewed inventory", "Inventory", id);
+        auditService.logAction("viewed inventory", "Inventory", id);
         return inventory;
     }
 
     @PutMapping("/{id}")
-    public Inventory updateInventory(@PathVariable Long id, @RequestBody Inventory inventory, @RequestHeader("X-User-Id") Long userId) {
+    public Inventory updateInventory(@PathVariable Long id, @RequestBody Inventory inventory) {
         inventory.setId(id);
         Inventory updated = inventoryRepository.save(inventory);
-        auditService.logAction("User " + userId + " updated inventory", "Inventory", id);
+        auditService.logAction("updated inventory", "Inventory", id);
         return updated;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteInventory(@PathVariable Long id, @RequestHeader("X-User-Id") Long userId) {
+    public void deleteInventory(@PathVariable Long id) {
         inventoryRepository.deleteById(id);
-        auditService.logAction("User " + userId + " deleted inventory", "Inventory", id);
+        auditService.logAction("deleted inventory", "Inventory", id);
     }
 }

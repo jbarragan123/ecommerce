@@ -28,32 +28,31 @@ public class UserController {
         return userRepository.save(user);
     }
 
-
     @GetMapping
-    public List<User> getAllUsers(@RequestHeader("X-User-Id") Long userId) {
+    public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
-        auditService.logAction("User " + userId + " listed all users", "User", null);
+        auditService.logAction("listed all users", "User", null);
         return users;
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id, @RequestHeader("X-User-Id") Long userId) {
+    public User getUserById(@PathVariable Long id) {
         User user = userRepository.findById(id).orElse(null);
-        auditService.logAction("User " + userId + " viewed user " + id, "User", id);
+        auditService.logAction("viewed user " + id, "User", id);
         return user;
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user, @RequestHeader("X-User-Id") Long userId) {
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         User updated = userRepository.save(user);
-        auditService.logAction("User " + userId + " updated user " + id, "User", id);
+        auditService.logAction("updated user " + id, "User", id);
         return updated;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id, @RequestHeader("X-User-Id") Long userId) {
+    public void deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
-        auditService.logAction("User " + userId + " deleted user " + id, "User", id);
+        auditService.logAction("deleted user " + id, "User", id);
     }
 }
