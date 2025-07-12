@@ -66,7 +66,8 @@
           </td>
           <td>
             <button class="btn btn-sm btn-warning" @click="openEditModal(product)">Editar</button>
-            <button class="btn btn-sm btn-danger ms-2" @click="deleteProduct(product.id)">Eliminar</button>
+            <!-- <button class="btn btn-sm btn-danger ms-2" @click="deleteProduct(product.id)">Eliminar</button> -->
+            <button class="btn btn-sm btn-danger ms-2" @click="inactivateProduct(product.id)">Inactivar</button>
           </td>
         </tr>
       </tbody>
@@ -177,9 +178,16 @@ const updateProduct = async () => {
   closeEditModal()
 }
 
-const deleteProduct = async (id: number) => {
-  if (confirm('¿Estás seguro de eliminar este producto?')) {
-    await axiosInstance.delete(`/products/${id}`)
+// const deleteProduct = async (id: number) => {
+//   if (confirm('¿Estás seguro de eliminar este producto?')) {
+//     await axiosInstance.delete(`/products/${id}`)
+//     await loadProducts()
+//   }
+// }
+
+const inactivateProduct = async (id: number) => {
+  if (confirm('¿Seguro que deseas inactivar este producto?')) {
+    await axiosInstance.patch(`/products/${id}/inactivate`)
     await loadProducts()
   }
 }

@@ -44,15 +44,27 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        user.setId(id);
-        User updated = userRepository.save(user);
+        User existingUser = userRepository.findById(id).orElseThrow();
+        existingUser.setEmail(user.getEmail());
+        existingUser.setFrequentClient(user.isFrequentClient());
+        User updated = userRepository.save(existingUser);
         auditService.logAction("updated user " + id, "User", id);
         return updated;
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userRepository.deleteById(id);
-        auditService.logAction("deleted user " + id, "User", id);
+    // @DeleteMapping("/{id}")
+    // public void deleteUser(@PathVariable Long id) {
+    //     userRepository.deleteById(id);
+    //     auditService.logAction("deleted user " + id, "User", id);
+    // }
+
+    @PatchMapping("/{id}/inactivate")
+    public User inactivateUser(@PathVariable Long id) {
+        User user = userRepository.findById(id).orElseThrow();
+        user.setActive(false);
+        User updated = userRepository.save(user);
+        auditService.logAction("inactivated user " + id, "User", id);
+        return updated;
     }
+    
 }

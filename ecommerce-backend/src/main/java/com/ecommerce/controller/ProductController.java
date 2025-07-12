@@ -28,6 +28,7 @@ public class ProductController {
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
+        product.setId(null);  // Forzar que el id sea null para que JPA lo genere automáticamente
         Product saved = productRepository.save(product);
         auditService.logAction("created product", "Product", saved.getId());
         return saved;
@@ -48,10 +49,19 @@ public class ProductController {
         return updated;
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        productRepository.deleteById(id);
-        auditService.logAction("deleted product", "Product", id);
+    // @DeleteMapping("/{id}")
+    // public void deleteProduct(@PathVariable Long id) {
+    //     productRepository.deleteById(id);
+    //     auditService.logAction("deleted product", "Product", id);
+    // }
+
+    @PatchMapping("/{id}/inactivate")
+    public Product inactivateProduct(@PathVariable Long id) {
+        Product product = productRepository.findById(id).orElseThrow();
+        product.setActive(false);
+        Product updated = productRepository.save(product);
+        auditService.logAction("inactivated product", "Product", id);
+        return updated;
     }
 
     @GetMapping("/active")

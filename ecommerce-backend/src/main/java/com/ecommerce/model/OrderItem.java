@@ -20,4 +20,6 @@ public class OrderItem {
 
     private int quantity;
     private double price;
+    @Column(name = "active")
+    private boolean active = true;
 }

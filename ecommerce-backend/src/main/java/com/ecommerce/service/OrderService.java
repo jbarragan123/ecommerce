@@ -98,5 +98,18 @@ public class OrderService {
         this.discountEndHour = end;
     }
 
+    public void deactivateOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+        order.setActive(false);
+        orderRepository.save(order);
+
+        List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
+        for (OrderItem item : items) {
+            item.setActive(false);
+            orderItemRepository.save(item);
+        }
+    }
+
 
 }

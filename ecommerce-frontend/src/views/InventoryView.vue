@@ -8,6 +8,7 @@
           <th>ID</th>
           <th>Producto</th>
           <th>Cantidad</th>
+          <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -17,8 +18,13 @@
           <td>{{ item.product.name }}</td>
           <td>{{ item.quantity }}</td>
           <td>
+            <span :class="item.active ? 'text-success' : 'text-danger'">
+              {{ item.active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
             <button class="btn btn-sm btn-warning me-2" @click="openEdit(item)">Editar</button>
-            <button class="btn btn-sm btn-danger" @click="deleteInventory(item.id)">Eliminar</button>
+            <button class="btn btn-sm btn-danger" @click="deleteInventory(item.id)" >Inactivar</button>
           </td>
         </tr>
       </tbody>
@@ -64,6 +70,7 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import axiosInstance from '@/axiosInstance'
@@ -98,8 +105,8 @@ const addInventory = async () => {
 }
 
 const deleteInventory = async (id: number) => {
-  if (confirm('¿Eliminar este inventario?')) {
-    await axiosInstance.delete(`/inventories/${id}`)
+  if (confirm('¿Inactivar este inventario?')) {
+    await axiosInstance.put(`/inventories/${id}/deactivate`)
     await loadInventory()
   }
 }
@@ -123,6 +130,7 @@ const updateInventory = async () => {
     closeEdit()
   }
 }
+
 
 onMounted(() => {
   loadInventory()

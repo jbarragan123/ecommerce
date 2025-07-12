@@ -48,10 +48,18 @@ public class InventoryController {
         return updated;
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteInventory(@PathVariable Long id) {
-        inventoryRepository.deleteById(id);
-        auditService.logAction("deleted inventory", "Inventory", id);
+    // @DeleteMapping("/{id}")
+    // public void deleteInventory(@PathVariable Long id) {
+    //     inventoryRepository.deleteById(id);
+    //     auditService.logAction("deleted inventory", "Inventory", id);
+    // }
+
+    @PutMapping("/{id}/deactivate")
+    public void deactivateInventory(@PathVariable Long id) {
+        Inventory inventory = inventoryRepository.findById(id).orElseThrow();
+        inventory.setActive(false);
+        inventoryRepository.save(inventory);
+        auditService.logAction("deactivated inventory", "Inventory", id);
     }
 
     @GetMapping("/{qty}")

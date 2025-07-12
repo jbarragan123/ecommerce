@@ -43,7 +43,7 @@ class OrderServiceTest {
     @Test
     void testCreateOrderWithItems() {
 
-        orderService.setDiscountHours("08:00", "20:00");
+        orderService.setDiscountHours("18:00", "23:59");
 
         // Arrange (preparar datos de prueba)
         Long userId = 1L;
@@ -77,6 +77,7 @@ class OrderServiceTest {
         assertEquals(userId, result.getUser().getId());
         assertEquals(1L, result.getId());
         assertEquals(orderDate, result.getOrderDate());
+        assertTrue(result.isActive());
 
         double expectedTotal = 200;
 

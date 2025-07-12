@@ -73,12 +73,13 @@ public class OrderController {
         return updated;
     }
 
-    // Eliminar orden por id
+    // inactivar orden por id
     @DeleteMapping("/{id}")
     public void deleteOrder(@PathVariable Long id) {
-        orderRepository.deleteById(id);
-        auditService.logAction("deleted order", "Order", id);
+        orderService.deactivateOrder(id);
+        auditService.logAction("deactivated order", "Order", id);
     }
+    
 
     // Reporte: Top 5 productos más vendidos
     @GetMapping("/reports/top-products")
@@ -98,5 +99,7 @@ public class OrderController {
     public List<OrderItem> getOrderItemsByOrderId(@RequestParam Long orderId) {
         return orderItemRepository.findByOrderId(orderId);
     }
+
+    
 
 }

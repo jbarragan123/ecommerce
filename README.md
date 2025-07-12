@@ -89,7 +89,11 @@ docker compose up --build
 Accesos:
 
 - **Backend:** `http://localhost:8080`
+
 - **Frontend:** `http://localhost:5173`
+
+    Usuario: admin
+    Contraseña: 1234
 
 Para detener:
 
@@ -98,6 +102,21 @@ docker compose down
 ```
 
 ---
+
+## Variables de configuración
+
+Para los descuentos y demás reglas de negocio solicitadas, en el archivo application.properties se manejan las variables:
+
+discount.start=18:00
+discount.end=23:59
+
+## Casos especiales de funcionamiento
+- Dado un rango de tiempo parametrizado todas las ordenes realizadas tendrán un
+descuento de 10%
+- De seleccionarse la funciónde pedido aleatorio, se debe brindar un descuento del
+50 % (los descuentos solo aplicaran si la orden queda registrada dentro del rango de
+tiempo definido)
+- De ser un cliente frecuente se le otorgará un descuento adicional del 5%
 
 ## 📖 Endpoints disponibles
 

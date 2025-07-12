@@ -4,11 +4,13 @@ import InventoryView from '@/views/InventoryView.vue'
 import OrdersView from '@/views/OrdersView.vue'
 import UsersView from '@/views/UsersView.vue'
 import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import ReportsView from '@/views/ReportsView.vue'
 
 const routes = [
   { path: '/', name: 'Login', component: LoginView },
+  { path: '/register', name: 'Register', component: RegisterView },
   { path: '/dashboard', name: 'Dashboard', component: DashboardView },
   { path: '/products', name: 'Products', component: ProductsView },
   { path: '/inventory', name: 'Inventory', component: InventoryView },
@@ -16,6 +18,7 @@ const routes = [
   { path: '/users', name: 'Users', component: UsersView },
   { path: '/reports', name: 'Reports', component: ReportsView }
 ]
+console.log('Rutas registradas:', routes)
 
 const router = createRouter({
   history: createWebHistory(),

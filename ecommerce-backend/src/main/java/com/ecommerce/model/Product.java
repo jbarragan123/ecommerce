@@ -8,11 +8,11 @@ import lombok.Data;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //
     private Long id;
 
     private String name;
     private String description;
     private double price;
-    private boolean active;
+    private boolean active = true;
 }

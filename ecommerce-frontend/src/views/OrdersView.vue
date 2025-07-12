@@ -24,7 +24,12 @@
           <td>$ {{ order.discountApplied.toFixed(2) }}</td>
           <td>
             <button class="btn btn-sm btn-info me-2" @click="viewOrder(order.id)">Ver</button>
-            <button class="btn btn-sm btn-danger" @click="deleteOrder(order.id)">Eliminar</button>
+            <button
+              class="btn btn-sm btn-danger"
+              @click="handleDeleteOrder(order.id)"
+            >
+              Inactivar
+            </button>
           </td>
         </tr>
       </tbody>
@@ -62,7 +67,13 @@
         <button type="button" class="btn btn-secondary mb-3" @click="addItem">+ Producto</button>
 
         <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" v-model="isRandom" id="randomCheck" style="border-color:black">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            v-model="isRandom"
+            id="randomCheck"
+            style="border-color:black"
+          />
           <label class="form-check-label" for="randomCheck">Pedido Aleatorio (50% desc)</label>
         </div>
 
@@ -104,9 +115,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
-const token = localStorage.getItem('token')
+import axiosInstance from '@/axiosInstance' // usa tu instancia personalizada
 
 const orders = ref([])
 const users = ref([])
@@ -122,23 +131,17 @@ const selectedOrder = ref(null)
 const selectedOrderItems = ref([])
 
 const loadOrders = async () => {
-  const res = await axios.get('http://localhost:8080/api/orders', {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+  const res = await axiosInstance.get('/orders')
   orders.value = res.data
 }
 
 const loadUsers = async () => {
-  const res = await axios.get('http://localhost:8080/api/users', {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+  const res = await axiosInstance.get('/users')
   users.value = res.data
 }
 
 const loadProducts = async () => {
-  const res = await axios.get('http://localhost:8080/api/products/active', {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+  const res = await axiosInstance.get('/products/active')
   products.value = res.data
 }
 
@@ -153,9 +156,7 @@ const createOrder = async () => {
     }))
   }
 
-  await axios.post('http://localhost:8080/api/orders/with-items', payload, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+  await axiosInstance.post('/orders/with-items', payload)
 
   await loadOrders()
 
@@ -166,23 +167,18 @@ const createOrder = async () => {
 }
 
 const viewOrder = async (id: number) => {
-  const orderRes = await axios.get(`http://localhost:8080/api/orders/${id}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+  const orderRes = await axiosInstance.get(`/orders/${id}`)
   selectedOrder.value = orderRes.data
 
-  const itemsRes = await axios.get(`http://localhost:8080/api/orders/order-items?orderId=${id}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+  const itemsRes = await axiosInstance.get(`/orders/order-items?orderId=${id}`)
   selectedOrderItems.value = itemsRes.data
 }
 
 const deleteOrder = async (id: number) => {
-  await axios.delete(`http://localhost:8080/api/orders/${id}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
+  await axiosInstance.delete(`/orders/${id}`)
   await loadOrders()
 }
+
 
 const addItem = () => {
   orderItems.value.push({ productId: '', quantity: 1 })
@@ -194,6 +190,17 @@ const removeItem = (index: number) => {
 
 const formatDate = (iso: string) => {
   return new Date(iso).toLocaleString()
+}
+
+const handleDeleteOrder = async (id: number) => {
+  if (confirm('¿Seguro que deseas desactivar esta orden?')) {
+    try {
+      await deleteOrder(id)
+    } catch (error) {
+      console.error('Error al eliminar la orden:', error)
+      alert('Ocurrió un error al eliminar la orden.')
+    }
+  }
 }
 
 onMounted(() => {

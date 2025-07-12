@@ -20,4 +20,6 @@ public class Order {
     private LocalDateTime orderDate;
     private double totalAmount;
     private double discountApplied;
+    @Column(name = "active")
+    private boolean active = true;
 }

@@ -11,6 +11,9 @@
         <input v-model="password" type="password" class="form-control" required />
       </div>
       <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+      <div class="text-center mt-3">
+        <router-link to="/register">¿No tienes cuenta? Regístrate</router-link>
+      </div>
     </form>
   </div>
 </template>
@@ -18,7 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import axiosInstance from '@/axiosInstance'
 
 const username = ref('')
 const password = ref('')
@@ -26,7 +29,7 @@ const router = useRouter()
 
 const login = async () => {
   try {
-    const response = await axios.post('http://localhost:8080/api/auth/login', {
+    const response = await axiosInstance.post('/auth/login', {
       username: username.value,
       password: password.value
     })
