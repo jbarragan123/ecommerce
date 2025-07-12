@@ -20,7 +20,7 @@ ecommerce/
 
 ## 🚀 Requisitos previos
 
-Tener instaladas las siguientes herramientas en tu equipo:
+Tener instaladas las siguientes herramientas en su equipo:
 
 - **Java 17+**
 - **Maven 3.8+**
@@ -112,24 +112,68 @@ http://localhost:5173
 
 ---
 
-## 📑 Endpoints Backend
+## 📖 Endpoints disponibles
 
-Todos los endpoints excepto login y register requieren autenticación mediante JWT. La autenticación y el consumo de estos endpoints se explicarán en el video demostrativo.
+Todos los endpoints excepto login y register requieren autenticación mediante JWT.
 
-Algunos enpoints:
+### 🔒 Autenticación (`/api/auth`)
 
-### 📦 Productos
-- `GET /api/products`
-- `POST /api/products`
-- `PUT /api/products/{id}`
-- `DELETE /api/products/{id}`
+| Método | Endpoint           | Descripción                |
+|:--------|:--------------------|:---------------------------|
+| `POST` | `/api/auth/login`  | Iniciar sesión y obtener JWT |
 
-### 👥 Usuarios
-- `GET /api/users`
-- `POST /api/users`
+---
 
-### 🔐 Autenticación
-- `POST /api/auth/login` → devuelve un token JWT para autenticación en los demás endpoints protegidos.
+### 👥 Usuarios (`/api/users`)
+
+| Método | Endpoint               | Descripción                     |
+|:--------|:------------------------|:--------------------------------|
+| `POST` | `/api/users/register`   | Registrar nuevo usuario         |
+| `GET`  | `/api/users`            | Listar todos los usuarios       |
+| `GET`  | `/api/users/{id}`       | Consultar usuario por ID        |
+| `PUT`  | `/api/users/{id}`       | Actualizar usuario por ID       |
+| `DELETE` | `/api/users/{id}`     | Eliminar usuario por ID         |
+
+---
+
+### 📦 Productos (`/api/products`)
+
+| Método | Endpoint                  | Descripción                          |
+|:--------|:-----------------------------|:--------------------------------------|
+| `GET`  | `/api/products`             | Listar todos los productos            |
+| `GET`  | `/api/products/{id}`        | Consultar producto por ID             |
+| `POST` | `/api/products`             | Crear nuevo producto                  |
+| `PUT`  | `/api/products/{id}`        | Actualizar producto por ID            |
+| `DELETE` | `/api/products/{id}`      | Eliminar producto por ID              |
+| `GET`  | `/api/products/active`      | Listar productos activos              |
+| `GET`  | `/api/products/search`      | Buscar productos por nombre y/o estado |
+
+---
+
+### 📥 Inventarios (`/api/inventories`)
+
+| Método | Endpoint                     | Descripción                       |
+|:--------|:--------------------------------|:----------------------------------|
+| `GET`  | `/api/inventories`              | Listar todos los inventarios      |
+| `GET`  | `/api/inventories/{id}`         | Consultar inventario por ID       |
+| `POST` | `/api/inventories`              | Crear nuevo inventario            |
+| `PUT`  | `/api/inventories/{id}`         | Actualizar inventario por ID      |
+| `DELETE` | `/api/inventories/{id}`       | Eliminar inventario por ID        |
+
+---
+
+### 📝 Órdenes (`/api/orders`)
+
+| Método | Endpoint                              | Descripción                                    |
+|:--------|:-------------------------------------------|:------------------------------------------------|
+| `GET`  | `/api/orders`                             | Listar todas las órdenes                        |
+| `GET`  | `/api/orders/{id}`                        | Consultar orden por ID                          |
+| `POST` | `/api/orders/with-items`                  | Crear nueva orden con items                     |
+| `PUT`  | `/api/orders/{id}`                        | Actualizar orden por ID                         |
+| `DELETE` | `/api/orders/{id}`                      | Eliminar orden por ID                           |
+| `GET`  | `/api/orders/order-items?orderId={id}`    | Consultar items de una orden                    |
+| `GET`  | `/api/orders/reports/top-products`        | Reporte: Top 5 productos más vendidos           |
+| `GET`  | `/api/orders/reports/top-clients`         | Reporte: Top 5 clientes frecuentes              |
 
 ---
 
