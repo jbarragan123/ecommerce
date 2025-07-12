@@ -165,11 +165,12 @@ El proyecto cuenta con 2 workflows en **GitHub Actions**:
 
 Se ejecutan automáticamente en cada `push` o `pull request`.
 
-## 📊 Análisis estático y reportes
+## 📊 Análisis estático, pruebas unitarias y reportes
 
 ### 📌 Backend
 
 - Análisis estático: Maven Surefire con reporte JUnit XML
+- Pruebas unitarias: Mockito y JUnit 5 (`mvn test`)
 - Reporte: disponible desde **GitHub Actions** → workflow → *Artifacts*
 
 ### 📌 Frontend
@@ -223,13 +224,7 @@ cd ecommerce
 
 ---
 
-## 🎞️ Video demostrativo
+## Contacto
 
-En el video adjunto se explica:
-
-- Flujo de autenticación con JWT.
-- Consumo de endpoints desde Postman.
-- Interacción desde frontend.
-- Proceso de login y uso de token.
-- Especificación de funcionalidades de la prueba técnica.
-
+Juan Barragán
+orionmaster8@gmail.com
