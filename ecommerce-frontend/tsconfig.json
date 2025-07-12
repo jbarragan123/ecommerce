@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node16",
+    "module": "Node16",
+    "target": "esnext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
-  }
+  },
 }

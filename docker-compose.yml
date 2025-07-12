@@ -1,0 +1,16 @@
+services:
+  backend:
+    build: ./ecommerce-backend
+    ports:
+      - "8080:8080"
+    container_name: ecommerce-backend
+    volumes:
+      - ./ecommerce-backend/data:/app/data
+
+  frontend:
+    build: ./ecommerce-frontend
+    ports:
+      - "5173:5173"
+    container_name: ecommerce-frontend
+    depends_on:
+      - backend

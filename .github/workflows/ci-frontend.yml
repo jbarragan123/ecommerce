@@ -9,7 +9,7 @@ on:
       - 'ecommerce-frontend/**'
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,17 +21,26 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: ecommerce-frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('ecommerce-frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
-        run: |
-          cd ecommerce-frontend
-          npm install
+        run: npm install
+        working-directory: ecommerce-frontend
 
       - name: Build frontend
-        run: |
-          cd ecommerce-frontend
-          npm run build
+        run: npm run build
+        working-directory: ecommerce-frontend
 
       - name: Run lint
-        run: |
-          cd ecommerce-frontend
-          npm run lint
+        run: npm run lint
+        working-directory: ecommerce-frontend
+
+      - name: Run unit tests
+        run: npm run test
+        working-directory: ecommerce-frontend
