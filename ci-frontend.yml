@@ -1,0 +1,37 @@
+name: CI Frontend
+
+on:
+  push:
+    paths:
+      - 'ecommerce-frontend/**'
+  pull_request:
+    paths:
+      - 'ecommerce-frontend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd ecommerce-frontend
+          npm install
+
+      - name: Build frontend
+        run: |
+          cd ecommerce-frontend
+          npm run build
+
+      - name: Run lint
+        run: |
+          cd ecommerce-frontend
+          npm run lint

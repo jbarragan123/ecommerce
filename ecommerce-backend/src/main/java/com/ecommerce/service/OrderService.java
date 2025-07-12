@@ -92,5 +92,10 @@ public class OrderService {
         return savedOrder;
     }
 
+    public void setDiscountHours(String start, String end) {
+        this.discountStartHour = start;
+        this.discountEndHour = end;
+    }
+
 
 }
