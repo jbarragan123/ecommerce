@@ -164,6 +164,10 @@ cd ecommerce
 
 ---
 
+## 📦 Estado de compilación
+
+![CI Backend](https://github.com/jbarragan123/ecommerce/actions/workflows/ci-backend.yml/badge.svg)
+![CI Frontend](https://github.com/jbarragan123/ecommerce/actions/workflows/ci-frontend.yml/badge.svg)
 
 ## 📌 Observaciones
 
