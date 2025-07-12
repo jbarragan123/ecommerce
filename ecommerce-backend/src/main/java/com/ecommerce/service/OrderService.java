@@ -62,6 +62,7 @@ public class OrderService {
             discount += 0.10;
         }
 
+        // Esto se setea de manera aleatoria en bd, no hay una lógica implementada en el software
         if (isRandomOrder) {
             discount += 0.50;
         }

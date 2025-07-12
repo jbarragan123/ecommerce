@@ -53,4 +53,11 @@ public class InventoryController {
         inventoryRepository.deleteById(id);
         auditService.logAction("deleted inventory", "Inventory", id);
     }
+
+    @GetMapping("/{qty}")
+    public Inventory getQtyInventory(@PathVariable Long qty) {
+        // Metodo mal SOLO PRUEBA NO USAR
+        Inventory inventory = inventoryRepository.findById(qty).orElse(null);
+        return inventory;
+    }
 }
