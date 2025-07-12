@@ -1,62 +1,96 @@
 package com.ecommerce.service;
 
 import com.ecommerce.model.Order;
+import com.ecommerce.model.OrderItem;
+import com.ecommerce.model.Product;
 import com.ecommerce.model.User;
+import com.ecommerce.repository.OrderItemRepository;
 import com.ecommerce.repository.OrderRepository;
+import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    // Parametrización desde application.properties
     @Value("${discount.start}")
     private String discountStartHour;
 
     @Value("${discount.end}")
     private String discountEndHour;
 
-    public Order createOrder(Order order, boolean isRandomOrder) {
+    public OrderService(OrderRepository orderRepository,
+                        OrderItemRepository orderItemRepository,
+                        UserRepository userRepository,
+                        ProductRepository productRepository) {
+        this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
+    }
 
-        double total = order.getTotalAmount();
+    public Order createOrderWithItems(Long userId, List<OrderItem> items,
+                                      boolean isRandomOrder,
+                                      java.time.LocalDateTime orderDate) {
+
+        double total = 0;
+
+        for (OrderItem item : items) {
+            Product product = productRepository.findById(item.getProduct().getId())
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + item.getProduct().getId()));
+
+            item.setPrice(product.getPrice());
+            total += product.getPrice() * item.getQuantity();
+        }
+
         double discount = 0;
 
         LocalTime discountStart = LocalTime.parse(discountStartHour);
         LocalTime discountEnd = LocalTime.parse(discountEndHour);
-        LocalTime orderTime = order.getOrderDate().toLocalTime();
+        LocalTime orderTime = orderDate.toLocalTime();
 
-        // 10% descuento si está en rango horario
         if (orderTime.isAfter(discountStart) && orderTime.isBefore(discountEnd)) {
             discount += 0.10;
         }
 
-        // 50% descuento si es pedido aleatorio
         if (isRandomOrder) {
             discount += 0.50;
         }
 
-        // 5% adicional si es cliente frecuente
-        User user = userRepository.findById(order.getUser().getId()).orElse(null);
-        if (user != null && user.isFrequentClient()) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found: " + userId));
+
+        if (user.isFrequentClient()) {
             discount += 0.05;
         }
 
         double discountApplied = total * discount;
         double finalTotal = total - discountApplied;
 
-        order.setDiscountApplied(discountApplied);
+        Order order = new Order();
+        order.setUser(user);
+        order.setOrderDate(orderDate);
         order.setTotalAmount(finalTotal);
+        order.setDiscountApplied(discountApplied);
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        for (OrderItem item : items) {
+            item.setOrder(savedOrder);
+            orderItemRepository.save(item);
+        }
+
+        return savedOrder;
     }
+
+
 }

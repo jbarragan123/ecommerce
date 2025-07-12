@@ -62,9 +62,21 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public List<Product> searchProducts(@RequestParam String query) {
-        List<Product> products = productRepository.findByNameContainingIgnoreCase(query);
-        auditService.logAction("searched products with query: " + query, "Product", null);
+    public List<Product> searchProducts(@RequestParam(required = false) String query,
+                                        @RequestParam(required = false) Boolean active) {
+        List<Product> products;
+
+        if (query != null && active != null) {
+            products = productRepository.findByNameContainingIgnoreCaseAndActive(query, active);
+        } else if (query != null) {
+            products = productRepository.findByNameContainingIgnoreCase(query);
+        } else if (active != null) {
+            products = productRepository.findByActive(active);
+        } else {
+            products = productRepository.findAll();
+        }
+
+        auditService.logAction("searched products with query: " + query + " and active: " + active, "Product", null);
         return products;
     }
 }

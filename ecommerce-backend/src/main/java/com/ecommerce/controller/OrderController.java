@@ -1,5 +1,6 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.dto.OrderWithItemsRequest;
 import com.ecommerce.model.Order;
 import com.ecommerce.repository.OrderItemRepository;
 import com.ecommerce.repository.OrderRepository;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.ecommerce.model.OrderItem;
 
 import java.util.List;
 
@@ -40,14 +42,18 @@ public class OrderController {
         return orders;
     }
 
-    // Crear nueva orden con descuentos especiales
-    @PostMapping
-    public Order createOrder(@RequestBody Order order,
-                             @RequestParam(defaultValue = "false") boolean random) {
-        Order saved = orderService.createOrder(order, random);
-        auditService.logAction("created order", "Order", saved.getId());
-        return saved;
+    @PostMapping("/with-items")
+    public Order createOrderWithItems(@RequestBody OrderWithItemsRequest request) {
+        Order savedOrder = orderService.createOrderWithItems(
+                request.getUserId(),
+                request.getItems(),
+                request.isRandom(),
+                request.getOrderDate()
+        );
+        auditService.logAction("created order with items", "Order", savedOrder.getId());
+        return savedOrder;
     }
+
 
     // Obtener orden por id
     @GetMapping("/{id}")
@@ -80,4 +86,17 @@ public class OrderController {
         Pageable topFive = PageRequest.of(0, 5);
         return orderItemRepository.findTopProducts(topFive);
     }
+
+    // Reporte: Top 5 clientes frecuentes
+    @GetMapping("/reports/top-clients")
+    public List<Object[]> getTopClients() {
+        Pageable topFive = PageRequest.of(0, 5);
+        return orderRepository.findTopClients(topFive);
+    }
+
+    @GetMapping("/order-items")
+    public List<OrderItem> getOrderItemsByOrderId(@RequestParam Long orderId) {
+        return orderItemRepository.findByOrderId(orderId);
+    }
+
 }

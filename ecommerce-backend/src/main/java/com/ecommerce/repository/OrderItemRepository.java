@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
+    List<OrderItem> findByOrderId(Long orderId);
+
     @Query("SELECT oi.product.name, SUM(oi.quantity) AS totalSold " +
             "FROM OrderItem oi " +
             "GROUP BY oi.product " +
