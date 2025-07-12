@@ -1,42 +1,34 @@
-import eslintRecommended from 'eslint/conf/eslint-recommended.js';
-import vue from 'eslint-plugin-vue';
-import { FlatCompat } from '@eslint/eslintrc';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-
-const compat = new FlatCompat({
-  recommendedConfig: eslintRecommended
-});
+import vue from 'eslint-plugin-vue'
+import vueParser from 'vue-eslint-parser'
+import tsParser from '@typescript-eslint/parser'
 
 export default [
-  ...compat.extends('eslint:recommended'),
   {
-    files: ['*.ts', '**/*.ts'],
+    files: ['**/*.vue'],
     languageOptions: {
-      parser: tsParser,
+      parser: vueParser,
       parserOptions: {
+        parser: tsParser,
         ecmaVersion: 2020,
-        sourceType: 'module',
-      },
+        sourceType: 'module'
+      }
     },
     plugins: {
-      '@typescript-eslint': tsPlugin,
+      vue
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': 'warn',
-    },
+      // puedes dejar esto vacío o meter reglas de Vue
+    }
   },
   {
-    files: ['*.vue', '**/*.vue'],
-    plugins: { vue },
+    files: ['**/*.ts'],
     languageOptions: {
-      parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
-      },
+      parser: tsParser,
+      ecmaVersion: 2020,
+      sourceType: 'module'
     },
     rules: {
-      'vue/multi-word-component-names': 'off',
-    },
-  },
-];
+      // puedes dejar esto vacío o meter reglas de TS
+    }
+  }
+]
