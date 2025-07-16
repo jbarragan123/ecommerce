@@ -7,6 +7,7 @@
       <router-link to="/orders" class="btn btn-outline-primary">Órdenes</router-link>
       <router-link to="/users" class="btn btn-outline-primary">Usuarios</router-link>
       <router-link to="/reports" class="btn btn-outline-primary">Reportes</router-link>
+      <router-link to="/audit" class="btn btn-outline-primary">Auditoria</router-link>
     </div>
     <!-- <div>
       <button @click="logout" class="btn btn-danger">Cerrar sesión</button>

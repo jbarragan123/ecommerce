@@ -7,6 +7,7 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import ReportsView from '@/views/ReportsView.vue'
+import AuditView from '@/views/AuditView.vue'
 
 const routes = [
   { path: '/', name: 'Login', component: LoginView },
@@ -16,9 +17,9 @@ const routes = [
   { path: '/inventory', name: 'Inventory', component: InventoryView },
   { path: '/orders', name: 'Orders', component: OrdersView },
   { path: '/users', name: 'Users', component: UsersView },
-  { path: '/reports', name: 'Reports', component: ReportsView }
+  { path: '/reports', name: 'Reports', component: ReportsView },
+  { path: '/audit', name: 'Audit', component: AuditView }
 ]
-console.log('Rutas registradas:', routes)
 
 const router = createRouter({
   history: createWebHistory(),

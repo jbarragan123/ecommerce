@@ -25,6 +25,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/reports">Reportes</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/audit">Auditoria</router-link>
+          </li>
         </ul>
 
         <button class="btn btn-outline-light" @click="logout">Cerrar Sesión</button>
