@@ -27,24 +27,28 @@ class OrderServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
+
     @Mock
     private OrderItemRepository orderItemRepository;
+
     @Mock
     private UserRepository userRepository;
+
     @Mock
     private ProductRepository productRepository;
 
     @InjectMocks
     private OrderService orderService;
 
-    private String discountStartHour;
-    private String discountEndHour;
+    @BeforeEach
+    void setUp() {
+        // Seteamos los valores de las propiedades privadas discountStartHour y discountEndHour
+        ReflectionTestUtils.setField(orderService, "discountStartHour", "18:00");
+        ReflectionTestUtils.setField(orderService, "discountEndHour", "23:59");
+    }
 
     @Test
     void testCreateOrderWithItems() {
-
-        orderService.setDiscountHours("18:00", "23:59");
-
         // Arrange (preparar datos de prueba)
         Long userId = 1L;
         User user = new User();
@@ -61,6 +65,7 @@ class OrderServiceTest {
 
         List<OrderItem> items = List.of(item);
 
+        // Hora fuera de rango (10:00 AM)
         LocalDateTime orderDate = LocalDateTime.of(2025, 7, 11, 10, 0);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -71,22 +76,23 @@ class OrderServiceTest {
             return o;
         });
 
+        // Act (ejecutar)
         Order result = orderService.createOrderWithItems(userId, items, true, orderDate);
 
+        // Assert (verificar)
         assertNotNull(result);
         assertEquals(userId, result.getUser().getId());
         assertEquals(1L, result.getId());
         assertEquals(orderDate, result.getOrderDate());
         assertTrue(result.isActive());
 
-        double expectedTotal = 200;
+        double expectedTotal = 200.0;
 
         // Descuentos:
-        // +10% por rango horario
         // +50% por pedido aleatorio
         // +5% por cliente frecuente
-        // Total descuento: 65%
-        double expectedDiscount = expectedTotal * 0.65;
+        // Total descuento: 55%
+        double expectedDiscount = expectedTotal * 0.55;
         double expectedFinalAmount = expectedTotal - expectedDiscount;
 
         assertEquals(expectedFinalAmount, result.getTotalAmount(), 0.01);
@@ -97,5 +103,4 @@ class OrderServiceTest {
         verify(orderRepository).save(any(Order.class));
         verify(orderItemRepository, times(1)).save(any(OrderItem.class));
     }
-
 }
